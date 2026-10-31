@@ -60,6 +60,10 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+#The prey population generally increases first, followed by an increase in the predator population. 
+As predators become more numerous, the prey population declines, eventually causing the predator population 
+to decline as well.
+#Phase-plane Analysis
 plt.figure(figsize=(8, 7))
 
 plt.plot(prey, predator, linewidth=2)
@@ -75,6 +79,10 @@ plt.grid(True)
 plt.legend()
 plt.tight_layout()
 plt.show()
+# -The closed trajectories represent periodic predator–prey population cycles.
+# -The populations continuously influence each other.
+# -The direction of movement around the trajectory shows how the two populations evolve relative to one another.
+#Investigating the effects of changing parameters
 growth_rates = [0.05, 0.1, 0.2]
 
 plt.figure(figsize=(11, 6))
@@ -104,7 +112,8 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
-#Numerical Equilibrium Analysis
+# This experiment allows you to investigate how different reproductive rates influence prey population fluctuations.
+#Investigating the relationship between predator and prey populations
 initial_conditions_list = [
     [20, 5],
     [40, 9],
@@ -139,3 +148,18 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+#This experiment demonstrates how different initial population sizes produce different trajectories in the phase plane.
+#Numerical equilibrium analysis
+# Calculate equilibrium populations
+
+prey_equilibrium = gamma / delta
+predator_equilibrium = alpha / beta
+
+print("Equilibrium Analysis")
+print("--------------------")
+
+print("Prey equilibrium:", prey_equilibrium)
+print("Predator equilibrium:", predator_equilibrium)
+#The equilibrium is a stationary solution of the differential equations. 
+However, in the classical Lotka–Volterra model, this positive equilibrium is
+a neutrally stable centre, not an asymptotically stable equilibrium.
