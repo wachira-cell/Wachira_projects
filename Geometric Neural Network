@@ -4,7 +4,7 @@
   "metadata": {
     "colab": {
       "provenance": [],
-      "authorship_tag": "ABX9TyOOIkC4J82XUTCuoAIkHsQn",
+      "authorship_tag": "ABX9TyMWTctw7ymjguQ3XVnZXzf0",
       "include_colab_link": true
     },
     "kernelspec": {
@@ -28,13 +28,13 @@
     },
     {
       "cell_type": "code",
-      "execution_count": 35,
+      "execution_count": 41,
       "metadata": {
         "id": "QHG3VabJf6jM",
         "colab": {
           "base_uri": "https://localhost:8080/"
         },
-        "outputId": "3a1a2e98-7b6d-4534-dddc-647554e4b944"
+        "outputId": "1de1d6ab-2ef0-4035-aaaa-07b7f01159a1"
       },
       "outputs": [
         {
@@ -71,11 +71,11 @@
             "Original Minkowski norm: -7.0\n",
             "Transformed Minkowski norm: -7.0\n",
             "Particle coordinates:\n",
-            "[[ 0.9641907   0.66600202  0.10835597 -0.45879864]\n",
-            " [-1.19002272  2.21418575 -0.88719164  0.11424569]\n",
-            " [-0.70743222  0.68965496  0.01992351 -0.10799397]\n",
-            " [-0.16131047 -0.80445543 -0.42516028 -0.87937777]\n",
-            " [-1.68660633  0.3705665   0.9399084  -1.37955458]]\n",
+            "[[-0.49442943  0.07264046  0.52812559 -1.94008613]\n",
+            " [ 0.70997691 -0.54651421  0.5333318   0.62700157]\n",
+            " [ 0.1515057   0.58006883 -0.36248597  1.16387491]\n",
+            " [ 1.32343773  1.23338174 -1.30745557 -2.19144306]\n",
+            " [ 0.02824932  0.35127805 -0.07433735  0.23146151]]\n",
             "\n",
             "Shape of the dataset:\n",
             "(5, 4)\n",
@@ -93,19 +93,30 @@
             "Shape of pairwise differences:\n",
             "(5, 5, 4)\n",
             "Pairwise Minkowski intervals:\n",
-            "[[ 0.         -0.92426774 -2.66287953  1.3570186  -5.4001718 ]\n",
-            " [-0.92426774  0.          2.96354891  9.25470625  8.72207048]\n",
-            " [-2.66287953  2.96354891  0.          2.72724943  1.6062741 ]\n",
-            " [ 1.3570186   9.25470625  2.72724943  0.          1.16773843]\n",
-            " [-5.4001718   8.72207048  1.6062741   1.16773843  0.        ]]\n",
+            "[[ 0.          5.52272422 10.26801442  1.47521781  4.88302657]\n",
+            " [ 5.52272422  0.          2.04802172 14.1238237   0.86699218]\n",
+            " [10.26801442  2.04802172  0.         11.20451928  0.98957746]\n",
+            " [ 1.47521781 14.1238237  11.20451928  0.          6.49164097]\n",
+            " [ 4.88302657  0.86699218  0.98957746  6.49164097  0.        ]]\n",
             "Edge features:\n",
-            "[[ 0.         -0.92426774 -2.66287953  1.3570186  -5.4001718 ]\n",
-            " [-0.92426774  0.          2.96354891  9.25470625  8.72207048]\n",
-            " [-2.66287953  2.96354891  0.          2.72724943  1.6062741 ]\n",
-            " [ 1.3570186   9.25470625  2.72724943  0.          1.16773843]\n",
-            " [-5.4001718   8.72207048  1.6062741   1.16773843  0.        ]]\n",
+            "[[ 0.          5.52272422 10.26801442  1.47521781  4.88302657]\n",
+            " [ 5.52272422  0.          2.04802172 14.1238237   0.86699218]\n",
+            " [10.26801442  2.04802172  0.         11.20451928  0.98957746]\n",
+            " [ 1.47521781 14.1238237  11.20451928  0.          6.49164097]\n",
+            " [ 4.88302657  0.86699218  0.98957746  6.49164097  0.        ]]\n",
             "inEdge features shape:\n",
-            "(5, 5)\n"
+            "(5, 5)\n",
+            "Pytorch version: 2.14.1+cpu\n",
+            "Particle coordinates: torch.Size([5, 4])\n",
+            "Minkowski metric: torch.Size([4, 4])\n",
+            "Ajacency matrix: torch.Size([5, 5])\n",
+            "<bound method Module.double of MessageFunction(\n",
+            "  (network): Sequential(\n",
+            "    (0): Linear(in_features=1, out_features=16, bias=True)\n",
+            "    (1): Tanh()\n",
+            "    (2): Linear(in_features=16, out_features=1, bias=True)\n",
+            "  )\n",
+            ")>\n"
           ]
         }
       ],
@@ -216,6 +227,34 @@
         "print(edge_features)\n",
         "print(\"inEdge features shape:\")\n",
         "print(edge_features.shape)\n",
+        "#Building a Lorenzt-equivariant message-passing layer\n",
+        "import torch.nn as nn\n",
+        "print(\"Pytorch version:\", torch.__version__)\n",
+        "#convert particle coordinates\n",
+        "x_torch=torch.tensor(x, dtype=torch.float64)\n",
+        "#Minkoski metric\n",
+        "eta_torch=torch.diag(\n",
+        "    torch.tensor([-1.0, 1.0, 1.0, 1.0], dtype=torch.float64)\n",
+        ")\n",
+        "#Ajacency matrix\n",
+        "A_torch=torch.tensor(A, dtype=torch.float64)\n",
+        "print(\"Particle coordinates:\", x_torch.shape)\n",
+        "print(\"Minkowski metric:\", eta_torch.shape)\n",
+        "print(\"Ajacency matrix:\", A_torch.shape)\n",
+        "#Building the message function\n",
+        "class MessageFunction(nn.Module):\n",
+        "  def __init__(self):\n",
+        "    super().__init__()\n",
+        "    self.network=nn.Sequential(\n",
+        "        nn.Linear(1, 16),\n",
+        "        nn.Tanh(),\n",
+        "        nn.Linear(16, 1)\n",
+        "    )\n",
+        "  def forward(self, squared_interval):\n",
+        "    return self.network(squared_interval.unsqueez(-1)).squeeze(-1)\n",
+        "message_function=MessageFunction().double\n",
+        "print(message_function)\n",
+        "\n",
         "\n"
       ]
     }
